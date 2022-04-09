@@ -1,6 +1,10 @@
-import {useState} from "react";
+import React, {useRef, useState} from "react";
 
 const DiaryEditor = () => {
+    //해당 element(HTML DOM 요소)에 접근하는 함수 - useRef() 이용
+    const authorInput = useRef();
+    const contentInput = useRef();
+
     //input, textarea에 사용할 State를 하나로 묶을 수 있다.
     const [state, setState] = useState({
         author: "", 
@@ -17,7 +21,21 @@ const DiaryEditor = () => {
     };
 
     const handleSubmit = () => {
-        console.log(state);
+        if(state.author.length < 1) {
+            //alert("작성자는 최소 1글자 이상 입력해주세요.");
+            //focus
+            authorInput.current.focus();    //길이가 1보다 작을 경우, focus
+            
+            return ;    //handleSubmit 함수를 다시 리턴
+        }
+
+        if(state.content.length < 5) {
+            //alert("일기 본문은 최소 5글자 이상 입력해주세요.");
+            //focus
+            contentInput.current.focus();   //길이가 5보다 작을 경우, focus
+            return ;    //handleSubmit 함수를 다시 리턴
+        }
+
         alert("저장 성공");
     };
     // const [author, setAuthor] = useState("");
@@ -27,6 +45,7 @@ const DiaryEditor = () => {
         <h2>오늘의 일기</h2>
         <div>
             <input 
+                ref={authorInput}
                 name='author'
                 value={state.author} 
                 onChange={handleChangeState}    //합쳐진 이벤트 핸들러 함수 사용
@@ -43,6 +62,7 @@ const DiaryEditor = () => {
         </div>
         <div>
             <textarea 
+                ref={contentInput}
                 name='content'
                 value={state.content} 
                 onChange={handleChangeState}    //합쳐진 이벤트 핸들러 함수 사용
