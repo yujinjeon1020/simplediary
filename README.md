@@ -1,2 +1,2 @@
 # simplediary
- simplediary
+ simplediary - use React
