@@ -1,6 +1,6 @@
 import React, {useRef, useState} from "react";
 
-const DiaryEditor = () => {
+const DiaryEditor = ({onCreate}) => {
     //해당 element(HTML DOM 요소)에 접근하는 함수 - useRef() 이용
     const authorInput = useRef();
     const contentInput = useRef();
@@ -11,6 +11,8 @@ const DiaryEditor = () => {
         content: "",
         emotion: 1,
     });
+    // const [author, setAuthor] = useState("");
+    // const [content, setContent] = useState("");
 
     //onChange 이벤트 핸들러 합치기 
     const handleChangeState = (e) => {
@@ -35,19 +37,24 @@ const DiaryEditor = () => {
             contentInput.current.focus();   //길이가 5보다 작을 경우, focus
             return ;    //handleSubmit 함수를 다시 리턴
         }
-
+        onCreate(state.author, state.content, state.emotion);   //상태 변경 값을 저장
         alert("저장 성공");
+        //저장 후 form 초기화
+        setState({
+            author: "",
+            content: "",
+            emotion: 1,
+        });
     };
-    // const [author, setAuthor] = useState("");
-    // const [content, setContent] = useState("");
 
-    return <div className="DiaryEditor">
+    return (
+    <div className="DiaryEditor">
         <h2>오늘의 일기</h2>
         <div>
             <input 
                 ref={authorInput}
                 name='author'
-                value={state.author} 
+                value={state.author}        //상태 변경 값
                 onChange={handleChangeState}    //합쳐진 이벤트 핸들러 함수 사용
                 // onChange={(e)=>{
                 //     //console.log(e.target.value);    //이벤트가 발생하는 target element의 변화된 value값 
@@ -64,7 +71,7 @@ const DiaryEditor = () => {
             <textarea 
                 ref={contentInput}
                 name='content'
-                value={state.content} 
+                value={state.content}       //상태 변경 값
                 onChange={handleChangeState}    //합쳐진 이벤트 핸들러 함수 사용
                 // onChange={(e)=>{
                 //     //console.log(e.target.value);
@@ -80,7 +87,7 @@ const DiaryEditor = () => {
             오늘의 감정점수 : 
             <select 
                 name='emotion' 
-                value={state.emotion} 
+                value={state.emotion}       //상태 변경 값
                 onChange={handleChangeState}>
                     <option value={1}>1</option>
                     <option value={2}>2</option>
@@ -92,7 +99,8 @@ const DiaryEditor = () => {
         <div>
             <button onClick={handleSubmit}>일기 저장하기</button>
         </div>
-    </div>;
+    </div>
+    );
 };
 
 export default DiaryEditor;
